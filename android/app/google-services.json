@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "437151721822",
+    "firebase_url": "https://nodemcu-iot-7405c.firebaseio.com",
+    "project_id": "nodemcu-iot-7405c",
+    "storage_bucket": "nodemcu-iot-7405c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:437151721822:android:c8b7773dc43dcbea",
+        "android_client_info": {
+          "package_name": "com.example.iot_light"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "437151721822-uhrl384ism8te419v1e0sv3jrug8qevv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnePVJLl5vwwmAEukZP-LxT4BpAXS9Kfk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "437151721822-uhrl384ism8te419v1e0sv3jrug8qevv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "437151721822-df6d2v0l12vg0ualhosmao8jbld717aj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "id.ac.binus.compeng.smartBulb"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:437151721822:android:a0869dd60977418d",
+        "android_client_info": {
+          "package_name": "id.ac.binus.compeng.smart_bulb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "437151721822-uhrl384ism8te419v1e0sv3jrug8qevv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnePVJLl5vwwmAEukZP-LxT4BpAXS9Kfk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "437151721822-uhrl384ism8te419v1e0sv3jrug8qevv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "437151721822-df6d2v0l12vg0ualhosmao8jbld717aj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "id.ac.binus.compeng.smartBulb"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

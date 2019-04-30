@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">437151721822-uhrl384ism8te419v1e0sv3jrug8qevv.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://nodemcu-iot-7405c.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">437151721822</string>
+    <string name="google_api_key" translatable="false">AIzaSyDnePVJLl5vwwmAEukZP-LxT4BpAXS9Kfk</string>
+    <string name="google_app_id" translatable="false">1:437151721822:android:a0869dd60977418d</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDnePVJLl5vwwmAEukZP-LxT4BpAXS9Kfk</string>
+    <string name="google_storage_bucket" translatable="false">nodemcu-iot-7405c.appspot.com</string>
+    <string name="project_id" translatable="false">nodemcu-iot-7405c</string>
+</resources>
