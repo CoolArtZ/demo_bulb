@@ -6,38 +6,43 @@
  *
  */
 
+import 'dart:async';
+import 'dart:io' show Platform;
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  final FirebaseApp app = await FirebaseApp.configure(
+    name: 'smart_bulb',
+    options: Platform.isIOS
+        ? const FirebaseOptions(
+            googleAppID: '1:437151721822:ios:75f7715e84472752',
+            gcmSenderID: '437151721822',
+            databaseURL: 'https://nodemcu-iot-7405c.firebaseio.com',
+          )
+        : const FirebaseOptions(
+            googleAppID: '1:437151721822:android:a0869dd60977418d',
+            apiKey: 'AIzaSyDnePVJLl5vwwmAEukZP-LxT4BpAXS9Kfk',
+            databaseURL: 'https://nodemcu-iot-7405c.firebaseio.com',
+          ),
+  );
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'IoT Button Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: MyHomePage(title: 'Demo Button'),
-    );
-  }
+  runApp(MaterialApp(
+    title: 'IoT Button Demo',
+    theme: ThemeData(
+      primarySwatch: Colors.green,
+    ),
+    home: MyHomePage(title: 'Demo Button', app: app),
+  ));
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  MyHomePage({Key key, this.title, this.app}) : super(key: key);
 
   final String title;
+  final FirebaseApp app;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -46,12 +51,64 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _state = 0;
   String _text = 'N/A';
+  DatabaseReference _stateRef;
+  StreamSubscription<Event> _stateSubscription;
+  DatabaseError _error;
 
   final _backColor = <Color>[
     Colors.lightBlue[50],
     Colors.grey[700],
   ];
 
+  Widget initScreen() {
+    return Center(
+      child: Text(
+        "Init Screen",
+      ),
+    );
+  }
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _stateRef = FirebaseDatabase.instance.reference().child('/LedStatus');
+    _stateRef.keepSynced(true);
+    _stateSubscription = _stateRef.onValue.listen((Event event) {
+      setState(() {
+        _error = null;
+        _state = event.snapshot.value ?? 0;
+        if (_state == 1)
+          _text = 'LED is OFF';
+        else
+          _text = 'LED is ON';
+      });
+    }, onError: (Object o) {
+      final DatabaseError error = o;
+      setState(() {
+        _error = error;
+
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _stateSubscription.cancel();
+  }
+
+  Future<void> _toggleState() async {
+    //final TransactionResult transactionResult =
+        await _stateRef.runTransaction((MutableData mutableData) async {
+      mutableData.value = (mutableData.value ?? 0) ^ 1;
+      return mutableData;
+    });
+  }
+
+  /*
   void _toggleState() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -60,11 +117,13 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _state ^= 1;
-      FirebaseDatabase().reference().child('/').update({'LedStatus':_state});
-      if(_state == 1) _text = 'LED OFF';
-      else _text = 'LED ON';
+      FirebaseDatabase().reference().child('/').update({'LedStatus': _state});
+      if (_state == 1)
+        _text = 'LED OFF';
+      else
+        _text = 'LED ON';
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
