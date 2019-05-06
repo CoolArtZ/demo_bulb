@@ -324,6 +324,10 @@
         "source": "/Users/johnmae/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/0d743321f0a87180dd02188647983923/res/drawable/common_google_signin_btn_text_light.xml"
     },
     {
+        "merged": "/Users/johnmae/AndroidStudioProjects/smart_bulb/build/app/intermediates/res/merged/debug/drawable_feng.png.flat",
+        "source": "/Users/johnmae/AndroidStudioProjects/smart_bulb/android/app/src/main/res/drawable/feng.png"
+    },
+    {
         "merged": "/Users/johnmae/AndroidStudioProjects/smart_bulb/build/app/intermediates/res/merged/debug/drawable_common_google_signin_btn_text_light_normal.xml.flat",
         "source": "/Users/johnmae/.gradle/caches/transforms-1/files-1.1/play-services-base-16.0.1.aar/0d743321f0a87180dd02188647983923/res/drawable/common_google_signin_btn_text_light_normal.xml"
     },

@@ -49,10 +49,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _state = 0;
-  String _text = 'N/A';
-  DatabaseReference _stateRef;
-  StreamSubscription<Event> _stateSubscription;
+  int _state_led = 0;
+  String _text_led = 'N/A';
+  int _state_power = 0;
+  String _text_power = 'N/A';
+  
+  DatabaseReference _stateRefLed;
+  StreamSubscription<Event> _stateSubscriptionLed;
+  DatabaseReference _stateRefPower;
+  StreamSubscription<Event> _stateSubscriptionPower;
   DatabaseError _error;
 
   final _backColor = <Color>[
@@ -74,16 +79,35 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    _stateRef = FirebaseDatabase.instance.reference().child('/LedStatus');
-    _stateRef.keepSynced(true);
-    _stateSubscription = _stateRef.onValue.listen((Event event) {
+    _stateRefLed = FirebaseDatabase.instance.reference().child('/LedStatus');
+    _stateRefLed.keepSynced(true);
+    _stateSubscriptionLed = _stateRefLed.onValue.listen((Event event) {
       setState(() {
         _error = null;
-        _state = event.snapshot.value ?? 0;
-        if (_state == 1)
-          _text = 'LED is OFF';
+        _state_led = event.snapshot.value ?? 0;
+        if (_state_led == 1)
+          _text_led = 'LED is OFF';
         else
-          _text = 'LED is ON';
+          _text_led = 'LED is ON';
+      });
+    }, onError: (Object o) {
+      final DatabaseError error = o;
+      setState(() {
+        _error = error;
+
+      });
+    });
+
+    _stateRefPower = FirebaseDatabase.instance.reference().child('/PowerAC');
+    _stateRefPower.keepSynced(true);
+    _stateSubscriptionPower = _stateRefPower.onValue.listen((Event event) {
+      setState(() {
+        _error = null;
+        _state_power = event.snapshot.value ?? 0;
+        if (_state_power == 1)
+          _text_power = 'AC Power is OFF';
+        else
+          _text_power = 'AC Power is ON';
       });
     }, onError: (Object o) {
       final DatabaseError error = o;
@@ -97,31 +121,40 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose() {
     super.dispose();
-    _stateSubscription.cancel();
+    _stateSubscriptionLed.cancel();
+    _stateSubscriptionPower.cancel();
   }
 
-  Future<void> _toggleState() async {
+  Future<void> _toggleStateLed() async {
     //final TransactionResult transactionResult =
-        await _stateRef.runTransaction((MutableData mutableData) async {
+    await _stateRefLed.runTransaction((MutableData mutableData) async {
+      mutableData.value = (mutableData.value ?? 0) ^ 1;
+      return mutableData;
+    });
+  }
+
+  Future<void> _toggleStatePower() async {
+    //final TransactionResult transactionResult =
+    await _stateRefPower.runTransaction((MutableData mutableData) async {
       mutableData.value = (mutableData.value ?? 0) ^ 1;
       return mutableData;
     });
   }
 
   /*
-  void _toggleState() {
+  void _toggleStateLed() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _state ^= 1;
-      FirebaseDatabase().reference().child('/').update({'LedStatus': _state});
-      if (_state == 1)
-        _text = 'LED OFF';
+      _state_led ^= 1;
+      FirebaseDatabase().reference().child('/').update({'LedStatus': _state_led});
+      if (_state_led == 1)
+        _text_led = 'LED OFF';
       else
-        _text = 'LED ON';
+        _text_led = 'LED ON';
     });
   }*/
 
@@ -139,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Center(child: Text(widget.title)),
       ),
-      backgroundColor: _backColor[_state],
+      backgroundColor: _backColor[_state_led],
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
@@ -160,15 +193,16 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              '$_text',
-              style: Theme.of(context).textTheme.display1,
+            RaisedButton(
+              onPressed: _toggleStateLed,
+              child: Text(
+                '$_text_led',
+              ),
             ),
             RaisedButton(
-              onPressed: _toggleState,
+              onPressed: _toggleStatePower,
               child: Text(
-                'Press me',
-                style: Theme.of(context).textTheme.display3,
+                '$_text_power',
               ),
             )
           ],
